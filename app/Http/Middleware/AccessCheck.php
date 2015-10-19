@@ -1,64 +1,110 @@
-<?php
-namespace DreamFactory\Http\Middleware;
+<?php namespace DreamFactory\Http\Middleware;
 
-use \Auth;
-use \Closure;
-use DreamFactory\Core\Models\App;
-use DreamFactory\Core\Models\Service;
-use DreamFactory\Core\Utility\JWTUtilities;
-use DreamFactory\Managed\Enums\ManagedDefaults;
-use DreamFactory\Managed\Support\Managed;
-use \JWTAuth;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
+use Closure;
 use DreamFactory\Core\Enums\VerbsMask;
-use DreamFactory\Library\Utility\ArrayUtils;
 use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Exceptions\ForbiddenException;
 use DreamFactory\Core\Exceptions\UnauthorizedException;
-use DreamFactory\Core\Utility\ResponseFactory;
+use DreamFactory\Core\Models\App;
 use DreamFactory\Core\Models\Role;
-use DreamFactory\Core\Models\User;
+use DreamFactory\Core\Models\Service;
+use DreamFactory\Core\User\Services\User;
+use DreamFactory\Core\Utility\JWTUtilities;
+use DreamFactory\Core\Utility\ResponseFactory;
 use DreamFactory\Core\Utility\Session;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Payload;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use DreamFactory\Managed\Enums\ManagedDefaults;
+use DreamFactory\Managed\Support\Managed;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Payload;
 
 class AccessCheck
 {
+    //******************************************************************************
+    //* Members
+    //******************************************************************************
+
+    /**
+     * @type array
+     */
     protected static $exceptions = [
         [
-            'verb_mask' => 31, //Allow all verbs
+            'verb_mask' => 31, //   Allow all verbs
             'service'   => 'system',
-            'resource'  => 'admin/session'
+            'resource'  => 'admin/session',
         ],
         [
-            'verb_mask' => 31, //Allow all verbs
+            'verb_mask' => 31, //   Allow all verbs
             'service'   => 'user',
-            'resource'  => 'session'
+            'resource'  => 'session',
         ],
         [
-            'verb_mask' => 2, //Allow POST only
+            'verb_mask' => 2, //    Allow POST only
             'service'   => 'user',
-            'resource'  => 'password'
+            'resource'  => 'password',
         ],
         [
-            'verb_mask' => 2, //Allow POST only
+            'verb_mask' => 2, //    Allow POST only
             'service'   => 'system',
-            'resource'  => 'admin/password'
+            'resource'  => 'admin/password',
         ],
         [
             'verb_mask' => 1,
             'service'   => 'system',
-            'resource'  => 'environment'
+            'resource'  => 'environment',
         ],
         [
             'verb_mask' => 1,
             'service'   => 'user',
-            'resource'  => 'profile'
-        ]
+            'resource'  => 'profile',
+        ],
     ];
+
+    /**
+     * @param Request $request
+     * @param Closure $next
+     *
+     * @return array|mixed|string
+     */
+    public function handle($request, Closure $next)
+    {
+        $_validSession = false;
+
+        try {
+            static::setExceptions();
+
+            //  Look for, and set, an API key
+            Session::setApiKey($_apiKey = static::getApiKey($request));
+
+            //  Get the app id
+            $_appId = App::getAppIdByApiKey($_apiKey);
+
+            //  Look for, and set, a JWT
+            Session::setSessionToken($_token = static::getJwt($request));
+
+            //  Set the session data
+            if (!$this->isManagedRequest($request)) {
+                $_validSession = $this->setSessionData($request, $_token, $_apiKey, $_appId);
+            }
+
+            //  Send the request through
+            if (static::isAccessAllowed() || !$_validSession) {
+                return $next($request);
+            }
+
+            if (!Session::isAuthenticated()) {
+                throw new UnauthorizedException('Unauthorized.');
+            }
+
+            throw new ForbiddenException('Access Forbidden.');
+        } catch (\Exception $e) {
+            return ResponseFactory::getException($e, $request);
+        }
+    }
 
     /**
      * @param Request $request
@@ -67,14 +113,197 @@ class AccessCheck
      */
     public static function getApiKey($request)
     {
-        //Check for API key in request parameters.
-        $apiKey = $request->query('api_key');
-        if (empty($apiKey)) {
-            //Check for API key in request HEADER.
-            $apiKey = $request->header('X_DREAMFACTORY_API_KEY');
+        //  Check for API key in request parameters or HTTP headers if not there
+        return $request->query('api_key', $request->header('X_DREAMFACTORY_API_KEY'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public static function getConsoleApiKey(Request $request)
+    {
+        if (config('df.standalone')) {
+            return null;
         }
 
-        return $apiKey;
+        //  Check for Console API key in request parameters and the HTTP headers
+        return $request->query('console_key', $request->header(ManagedDefaults::CONSOLE_X_HEADER));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public static function getJwt($request)
+    {
+        return static::getJWTFromAuthHeader()
+            ?: $request->header('X_DREAMFACTORY_SESSION_TOKEN',
+                $request->input('session_token', $request->input('token')));
+    }
+
+    /**
+     * Generates the role data array using the role model.
+     *
+     * @param Role $role
+     *
+     * @return array
+     */
+    protected static function getRoleData(Role $role)
+    {
+        return [
+            'name'     => $role->name,
+            'id'       => $role->id,
+            'services' => $role->getRoleServiceAccess(),
+        ];
+    }
+
+    /**
+     * Checks to see if it is an admin user login call.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return bool
+     * @throws \DreamFactory\Core\Exceptions\NotImplementedException
+     */
+    protected static function isException($request)
+    {
+        $_params = static::getRequestParameters($request);
+
+        foreach (static::$exceptions as $exception) {
+            if (($_params['action'] & array_get($exception, 'verb_mask')) &&
+                $_params['service'] == array_get($exception, 'service') &&
+                $_params['resource'] == array_get($exception, 'resource')
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks to see if Access is Allowed based on Role-Service-Access.
+     *
+     * @return bool
+     * @throws \DreamFactory\Core\Exceptions\NotImplementedException
+     */
+    public static function isAccessAllowed()
+    {
+        $_params = static::getRequestParameters();
+
+        return $_params['action'] & Session::getServicePermissions($_params['service'], $_params['resource']);
+    }
+
+    protected static function setExceptions()
+    {
+        if (class_exists(User::class)) {
+            $userService = Service::getCachedByName('user');
+
+            if ($userService['config']['allow_open_registration']) {
+                static::$exceptions[] = [
+                    'verb_mask' => 2, //    Allow POST only
+                    'service'   => 'user',
+                    'resource'  => 'register',
+                ];
+            }
+        }
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $appId
+     * @param string|null              $token
+     * @param string|null              $apiKey
+     *
+     * @return bool True if the request is authenticated/valid. False if it's already an error.
+     * @throws \DreamFactory\Core\Exceptions\BadRequestException
+     * @throws \DreamFactory\Core\Exceptions\ForbiddenException
+     * @throws \DreamFactory\Core\Exceptions\UnauthorizedException
+     */
+    protected function setSessionData(Request $request, $appId, $token = null, $apiKey = null)
+    {
+        //  JWT authenticated
+        if (!empty($token)) {
+            $this->setSessionDataFromToken($request, $token, $appId);
+
+            return true;
+        }
+
+        //  Just Api Key is supplied. No authenticated session
+        if (!empty($apiKey)) {
+            Session::setSessionData($appId);
+
+            return true;
+        }
+
+        //  Basic auth
+        if ($request->getUser() && $request->getPassword()) {
+            $this->setBasicAuthSession($request);
+
+            return true;
+        }
+
+        //  Path exception
+        if (static::isException($request)) {
+            return false;
+        }
+
+        throw new BadRequestException('Bad request. No token or api key provided.');
+    }
+
+    /**
+     * Set session data from authenticated JWT token
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $token
+     * @param string                   $appId
+     *
+     * @throws \DreamFactory\Core\Exceptions\BadRequestException
+     * @throws \DreamFactory\Core\Exceptions\ForbiddenException
+     * @throws \DreamFactory\Core\Exceptions\UnauthorizedException
+     */
+    protected function setSessionDataFromToken(Request $request, $token, $appId)
+    {
+        try {
+            /** @noinspection PhpUndefinedMethodInspection */
+            JWTAuth::setToken($token);
+
+            /** @noinspection PhpUndefinedMethodInspection */
+            $_payload = JWTAuth::getPayload();
+            JWTUtilities::verifyUser($_payload);
+
+            /** @type Payload $payload */
+            Session::setSessionData($appId, $payload->get('user_id'));
+        } catch (TokenExpiredException $e) {
+            JWTUtilities::clearAllExpiredTokenMaps();
+
+            if (!static::isException($request)) {
+                throw new UnauthorizedException($e->getMessage());
+            }
+        } catch (TokenBlacklistedException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (TokenInvalidException $e) {
+            throw new BadRequestException('Invalid token supplied.');
+        }
+    }
+
+    /**
+     * @param string $appId
+     *
+     * @throws \DreamFactory\Core\Exceptions\UnauthorizedException
+     */
+    protected function setBasicAuthSession($appId)
+    {
+        \Auth::onceBasic();
+
+        if (\Auth::guest()) {
+            throw new UnauthorizedException('Unauthorized. Invalid credentials.');
+        }
+
+        Session::setSessionData($appId, \Auth::user()->id);
     }
 
     /**
@@ -84,8 +313,8 @@ class AccessCheck
      */
     protected static function getJWTFromAuthHeader()
     {
-        if (env('APP_ENV') === 'testing') {
-            //getallheaders method is not available in unit test mode.
+        //  Not available in test mode.
+        if ('testing' == env('APP_ENV')) {
             return [];
         }
 
@@ -108,222 +337,41 @@ class AccessCheck
             }
         }
 
-        $token = null;
-        $headers = getallheaders();
-        $authHeader = ArrayUtils::get($headers, 'Authorization');
-        if (strpos($authHeader, 'Bearer') !== false) {
-            $token = substr($authHeader, 7);
-        }
+        $_authHeader = array_get(getallheaders(), 'Authorization');
 
-        return $token;
+        return false !== strpos($_authHeader, 'Bearer') ? substr($_authHeader, 7) : null;
     }
 
     /**
-     * @param Request $request
+     * Checks if a request is a DFE request
      *
-     * @return mixed
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return bool
      */
-    public static function getConsoleApiKey($request)
+    protected function isManagedRequest(Request $request)
     {
-        //If instance is standalone return null
-        if (config('df.standalone')) {
-            return null;
-        }
-        //Check for Console API key in request parameters.
-        $consoleApiKey = $request->query('console_key');
-        if (empty($consoleApiKey)) {
-            //Check for API key in request HEADER.
-            $consoleApiKey = $request->header(ManagedDefaults::CONSOLE_X_HEADER);
-        }
-
-        return $consoleApiKey;
+        //  Check for a matching console api key
+        return static::getConsoleApiKey($request) == Managed::getConsoleKey();
     }
 
     /**
-     * @param Request $request
+     * Pulls the action, resource, and service parameters from a request
      *
-     * @return mixed
-     */
-    public static function getJwt($request)
-    {
-        $token = static::getJWTFromAuthHeader();
-        if (empty($token)) {
-            $token = $request->header('X_DREAMFACTORY_SESSION_TOKEN');
-        }
-        if (empty($token)) {
-            $token = $request->input('session_token');
-        }
-        if (empty($token)) {
-            $token = $request->input('token');
-        }
-
-        return $token;
-    }
-
-    /**
-     * @param Request $request
-     * @param Closure $next
-     *
-     * @return array|mixed|string
-     */
-    public function handle($request, Closure $next)
-    {
-        try {
-            static::setExceptions();
-            //Get the api key.
-            $apiKey = static::getApiKey($request);
-            Session::setApiKey($apiKey);
-            $appId = App::getAppIdByApiKey($apiKey);
-
-            //Get the JWT.
-            $token = static::getJwt($request);
-            Session::setSessionToken($token);
-
-            //Get the Console API Key
-            $consoleApiKey = static::getConsoleApiKey($request);
-
-            //Check for basic auth attempt.
-            $basicAuthUser = $request->getUser();
-            $basicAuthPassword = $request->getPassword();
-
-            if (!config('df.standalone') && !empty($consoleApiKey) && $consoleApiKey === Managed::getConsoleKey()) {
-                //DFE Console request
-                return $next($request);
-            } elseif (!empty($basicAuthUser) && !empty($basicAuthPassword)) {
-                //Attempting to login using basic auth.
-                Auth::onceBasic();
-                /** @var User $authenticatedUser */
-                $authenticatedUser = Auth::user();
-                if (!empty($authenticatedUser)) {
-                    $userId = $authenticatedUser->id;
-                    Session::setSessionData($appId, $userId);
-                } else {
-                    throw new UnauthorizedException('Unauthorized. User credentials did not match.');
-                }
-            } elseif (!empty($token)) {
-                //JWT supplied meaning an authenticated user session/token.
-                try {
-                    JWTAuth::setToken($token);
-                    /** @type Payload $payload */
-                    $payload = JWTAuth::getPayload();
-                    JWTUtilities::verifyUser($payload);
-                    $userId = $payload->get('user_id');
-                    Session::setSessionData($appId, $userId);
-                } catch (TokenExpiredException $e) {
-                    JWTUtilities::clearAllExpiredTokenMaps();
-                    if (!static::isException($request)) {
-                        throw new UnauthorizedException($e->getMessage());
-                    }
-                } catch (TokenBlacklistedException $e) {
-                    throw new ForbiddenException($e->getMessage());
-                } catch (TokenInvalidException $e) {
-                    throw new BadRequestException('Invalid token supplied.');
-                }
-            } elseif (!empty($apiKey)) {
-                //Just Api Key is supplied. No authenticated session
-                Session::setSessionData($appId);
-            } elseif (static::isException($request)) {
-                //Path exception.
-                return $next($request);
-            } else {
-                throw new BadRequestException('Bad request. No token or api key provided.');
-            }
-
-            if (static::isAccessAllowed()) {
-                return $next($request);
-            } elseif (static::isException($request)) {
-                //API key and/or (non-admin) user logged in, but if access is still not allowed then check for exception case.
-                return $next($request);
-            } else {
-                if (!Session::isAuthenticated()) {
-                    throw new UnauthorizedException('Unauthorized.');
-                } else {
-                    throw new ForbiddenException('Access Forbidden.');
-                }
-            }
-        } catch (\Exception $e) {
-            return ResponseFactory::getException($e, $request);
-        }
-    }
-
-    /**
-     * Generates the role data array using the role model.
-     *
-     * @param Role $role
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
+     * @throws \DreamFactory\Core\Exceptions\NotImplementedException
      */
-    protected static function getRoleData(Role $role)
+    protected static function getRequestParameters(Request $request = null)
     {
-        $rsa = $role->getRoleServiceAccess();
+        /** @type Router $_router */
+        $_router = app('router');
 
-        $roleData = [
-            'name'     => $role->name,
-            'id'       => $role->id,
-            'services' => $rsa
+        return [
+            'action'   => VerbsMask::toNumeric($request ? $request->getMethod() : \Request::getMethod()),
+            'resource' => strtolower($_router->input('resource')),
+            'service'  => strtolower($_router->input('service')),
         ];
-
-        return $roleData;
-    }
-
-    /**
-     * Checks to see if it is an admin user login call.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return bool
-     * @throws \DreamFactory\Core\Exceptions\NotImplementedException
-     */
-    protected static function isException($request)
-    {
-        /** @var Router $router */
-        $router = app('router');
-        $service = strtolower($router->input('service'));
-        $resource = strtolower($router->input('resource'));
-        $action = VerbsMask::toNumeric($request->getMethod());
-
-        foreach (static::$exceptions as $exception) {
-            if (($action & ArrayUtils::get($exception, 'verb_mask')) &&
-                $service === ArrayUtils::get($exception, 'service') &&
-                $resource === ArrayUtils::get($exception, 'resource')
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks to see if Access is Allowed based on Role-Service-Access.
-     *
-     * @return bool
-     * @throws \DreamFactory\Core\Exceptions\NotImplementedException
-     */
-    public static function isAccessAllowed()
-    {
-        /** @var Router $router */
-        $router = app('router');
-        $service = strtolower($router->input('service'));
-        $component = strtolower($router->input('resource'));
-        $action = VerbsMask::toNumeric(\Request::getMethod());
-        $allowed = Session::getServicePermissions($service, $component);
-
-        return ($action & $allowed) ? true : false;
-    }
-
-    protected static function setExceptions()
-    {
-        if (class_exists(\DreamFactory\Core\User\Services\User::class)) {
-            $userService = Service::getCachedByName('user');
-
-            if ($userService['config']['allow_open_registration']) {
-                static::$exceptions[] = [
-                    'verb_mask' => 2, //Allow POST only
-                    'service'   => 'user',
-                    'resource'  => 'register'
-                ];
-            }
-        }
     }
 }

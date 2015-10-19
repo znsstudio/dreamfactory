@@ -1,6 +1,6 @@
 {
   "name":              "dreamfactory/dreamfactory",
-  "description":       "The DreamFactory(tm) Platform.",
+  "description":       "The DreamFactory(tm) Platform",
   "keywords":          [
     "api",
     "dreamfactory",
@@ -84,11 +84,16 @@
       "php -r \"copy('phpunit.xml-dist', 'phpunit.xml');\"",
       "php artisan key:generate",
       "php artisan clear-compiled",
+      "php artisan ide-helper:generate",
       "php artisan optimize",
       "php artisan dreamfactory:pull-migrations"
     ],
     "post-update-cmd":  [
       "php artisan clear-compiled",
+      "php artisan config:clear",
+      "php artisan cache:clear",
+      "php artisan route:clear",
+      "php artisan ide-helper:generate",
       "php artisan optimize",
       "php artisan dreamfactory:pull-migrations"
     ]

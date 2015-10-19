@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug'           => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG'),
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'url'             => 'http://localhost',
+    'url' => 'http://localhost',
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'timezone'        => 'UTC',
+    'timezone' => 'UTC',
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -49,7 +49,7 @@ return [
     |
     */
 
-    'locale'          => 'en',
+    'locale' => 'en',
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -73,8 +73,8 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', 'SomeRandomString'),
-    'cipher'          => MCRYPT_RIJNDAEL_128,
+    'key'    => env('APP_KEY', 'SomeRandomString'),
+    'cipher' => MCRYPT_RIJNDAEL_128,
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -88,7 +88,7 @@ return [
     |
     */
 
-    'log'             => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'single'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -100,7 +100,7 @@ return [
     |
     */
 
-    'providers'       => [
+    'providers' => [
 
         /*
          * Laravel Framework Service Providers...
@@ -143,7 +143,7 @@ return [
          * Uncomment the following line to generate IDE helper
          * using "php artisan ide-helper:generate" command,
          * */
-        //Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'aliases'         => [
+    'aliases' => [
         'App'       => Illuminate\Support\Facades\App::class,
         'Artisan'   => Illuminate\Support\Facades\Artisan::class,
         'Auth'      => Illuminate\Support\Facades\Auth::class,

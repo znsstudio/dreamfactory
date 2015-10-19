@@ -1,6 +1,4 @@
-<?php
-
-namespace Dreamfactory\Http\Middleware;
+<?php namespace Dreamfactory\Http\Middleware;
 
 use Closure;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
@@ -8,13 +6,22 @@ use DreamFactory\Core\Exceptions\TooManyRequestsException;
 use DreamFactory\Core\Utility\ResponseFactory;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Managed\Support\Managed;
-use Illuminate\Contracts\Routing\Middleware;
-use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Cache;
 
 class Limits
 {
+    //******************************************************************************
+    //* Members
+    //******************************************************************************
 
-    private $_inUnitTest = false;
+    /**
+     * @type bool
+     */
+    private $inUnitTest = false;
+
+    //******************************************************************************
+    //* Methods
+    //******************************************************************************
 
     /**
      * Handle an incoming request.
@@ -27,50 +34,50 @@ class Limits
     public function handle($request, Closure $next)
     {
         //Get the Console API Key
-        $consoleApiKey = AccessCheck::getConsoleApiKey($request);
+        $_apiKey = AccessCheck::getConsoleApiKey($request);
 
         // Get limits
-        if(config('df.standalone') === true || $consoleApiKey === Managed::getConsoleKey()){
+        if (config('df.standalone', true) || $_apiKey === Managed::getConsoleKey()) {
             return $next($request);
-        } else {
-            $limits = Managed::getLimits();
-
-            // The limits array comes across from the console as a bunch of Std Objects, need to turn it back
-            // into an array
-            $limits['api'] = (array)$limits['api'];
-
-            foreach(array_keys($limits['api']) as $key) {
-                $limits['api'][$key] = (array)$limits['api'][$key];
-            }
         }
 
+        $_limits = Managed::getLimits();
 
-        if (!empty($limits) && is_null($this->_getServiceName()) === false) {
+        //  Convert any \stdClass response into an array
+        $_limits['api'] = (array)$_limits['api'];
 
-            $this->_inUnitTest = \Config::get('api_limits_test');
+        foreach (array_keys($_limits['api']) as $_key) {
+            $_limits['api'][$_key] = (array)$_limits['api'][$_key];
+        }
 
-            $userName = $this->_getUser(Session::getCurrentUserId());
-            $userRole = $this->_getRole(Session::getRoleId());
-            $apiName = $this->_getApiKey(Session::getApiKey());
-            $serviceName = $this->_getServiceName();
+        if (!empty($_limits) && !is_null($this->getServiceName())) {
+            $this->inUnitTest = config('api_limits_test');
 
-            // Build the list of API Hits to check
+            $userName = $this->getUser(Session::getCurrentUserId());
+            $userRole = $this->getRole(Session::getRoleId());
+            $apiName = $this->getApiKey(Session::getApiKey());
+            $serviceName = $this->getServiceName();
 
+            //  Build the list of API Hits to check
             $apiKeysToCheck = ['cluster.default' => 0, 'instance.default' => 0];
 
             $serviceKeys[$serviceName] = 0;
+
             if (is_null($userRole) === false) {
                 $serviceKeys[$serviceName . '.' . $userRole] = 0;
             }
+
             if (is_null($userName) === false) {
                 $serviceKeys[$serviceName . '.' . $userName] = 0;
             }
 
             if (is_null($apiName) === false) {
                 $apiKeysToCheck[$apiName] = 0;
+
                 if (is_null($userRole) === false) {
                     $apiKeysToCheck[$apiName . '.' . $userRole] = 0;
                 }
+
                 if (is_null($userName) === false) {
                     $apiKeysToCheck[$apiName . '.' . $userName] = 0;
                 }
@@ -98,29 +105,27 @@ class Limits
                 foreach (array_keys($apiKeysToCheck) as $key) {
                     foreach ($timePeriods as $period) {
                         $keyToCheck = $key . '.' . $period;
-                        if (array_key_exists($keyToCheck, $limits['api']) === true) {
 
-                            $cacheValue = \Cache::get($keyToCheck, 0);
+                        if (array_key_exists($keyToCheck, $_limits['api']) === true) {
+                            /** @noinspection PhpUndefinedMethodInspection */
+                            $cacheValue = Cache::get($keyToCheck, 0);
                             $cacheValue++;
-                            \Cache::put($keyToCheck, $cacheValue, $limits['api'][$keyToCheck]['period']);
-                            if ($cacheValue > $limits['api'][$keyToCheck]['limit']) {
+                            /** @noinspection PhpUndefinedMethodInspection */
+                            Cache::put($keyToCheck, $cacheValue, $_limits['api'][$keyToCheck]['period']);
+                            if ($cacheValue > $_limits['api'][$keyToCheck]['limit']) {
                                 $overLimit = true;
                             }
                         }
                     }
                 }
-            } catch ( \Exception $e ) {
-                return ResponseFactory::getException(
-                    new InternalServerErrorException('Unable to update cache'),
-                    $request
-                );
+            } catch (\Exception $e) {
+                return ResponseFactory::getException(new InternalServerErrorException('Unable to update cache'),
+                    $request);
             }
 
-            if ($overLimit === true) {
-                return ResponseFactory::getException(
-                    new TooManyRequestsException('Specified connection limit exceeded'),
-                    $request
-                );
+            if ($overLimit) {
+                return ResponseFactory::getException(new TooManyRequestsException('Specified connection limit exceeded'),
+                    $request);
             }
         }
 
@@ -134,13 +139,9 @@ class Limits
      *
      * @return null|string
      */
-    private function _getUser($userId)
+    private function getUser($userId)
     {
-        if ($this->_inUnitTest === true) {
-            return 'user:1';
-        } else {
-            return is_null($userId) === false ? 'user:' . $userId : null;
-        }
+        return $this->buildCacheKey('user:1', 'user', $userId);
     }
 
     /**
@@ -151,13 +152,9 @@ class Limits
      *
      * @return null|string
      */
-    private function _getRole($roleId)
+    private function getRole($roleId)
     {
-        if ($this->_inUnitTest === true) {
-            return 'role:2';
-        } else {
-            return is_null($roleId) === false ? 'role:' . $roleId : null;
-        }
+        return $this->buildCacheKey('role:2', 'role', $roleId);
     }
 
     /**
@@ -167,14 +164,9 @@ class Limits
      *
      * @return null|string
      */
-
-    private function _getApiKey($apiKey)
+    private function getApiKey($apiKey)
     {
-        if ($this->_inUnitTest === true) {
-            return 'api_key:apiName';
-        } else {
-            return is_null($apiKey) === false ? 'api_key:' . $apiKey : null;
-        }
+        return $this->buildCacheKey('api_key:apiName', 'api_key', $apiKey);
     }
 
     /**
@@ -182,22 +174,28 @@ class Limits
      *
      * @return null|string
      */
-
-    private function _getServiceName()
+    private function getServiceName()
     {
-        if ($this->_inUnitTest === true) {
+        if ($this->inUnitTest) {
             return 'service:serviceName';
-        } else {
-            /** @var Router $router */
-            $router = app('router');
-            $service = strtolower($router->input('service'));
-
-            if (is_null($service) === true ) {
-                return null;
-            } else {
-                return 'service:' . $service;
-            }
-
         }
+
+        $_service = strtolower(app('router')->input('service'));
+
+        return null === $_service ? null : 'service:' . $_service;
+    }
+
+    /**
+     * Builds a cache key
+     *
+     * @param string $key
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return null|string
+     */
+    private function buildCacheKey($key, $name, $value)
+    {
+        return $this->inUnitTest ? $key : (null === $value ? null : $name . ':' . $value);
     }
 }
