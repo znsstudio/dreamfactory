@@ -1,7 +1,6 @@
 <?php namespace Dreamfactory\Http\Middleware;
 
 use Closure;
-use DreamFactory\Core\Utility\Session;
 use DreamFactory\Managed\Support\Managed;
 
 class DataCollection
@@ -20,10 +19,8 @@ class DataCollection
      */
     public function handle($request, Closure $next)
     {
-        logger('middleware: data_collection');
-
         //  Send the audit data
-        Managed::auditRequest($request, Session::getPublicInfo());
+        Managed::auditRequest($request);
 
         return $next($request);
     }

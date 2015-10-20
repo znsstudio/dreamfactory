@@ -50,7 +50,7 @@ return [
             'dump'        => env('DF_FREETDS_DUMP'),
             // Location of connection dump file, defaults to disabled
             'dumpconfig'  => env('DF_FREETDS_DUMPCONFIG'),
-        ]
+        ],
     ],
     // Cache config, in minutes
     'default_cache_ttl'            => env('DF_CACHE_TTL', 300),
@@ -73,12 +73,12 @@ return [
             'exposedHeaders'      => [],
             'maxAge'              => 0,
             'hosts'               => [],
-        ]
+        ],
     ],
     'scripting'                    => [
         // 'all' to disable all scripting, or comma-delimited list of v8js, nodejs, and/or php
         'disable'     => env('DF_SCRIPTING_DISABLE'),
         // path to the installed nodejs executable
         'nodejs_path' => env('DF_NODEJS_PATH'),
-    ]
+    ],
 ];

@@ -134,7 +134,6 @@ return [
          */
         DreamFactory\Core\Providers\DfServiceProvider::class,
         DreamFactory\Core\Providers\DfCorsServiceProvider::class,
-        DreamFactory\Managed\Providers\AuditServiceProvider::class,
 
         /**
          * Third party packages...
@@ -156,6 +155,7 @@ return [
         DreamFactory\Providers\ConfigServiceProvider::class,
         DreamFactory\Providers\EventServiceProvider::class,
         DreamFactory\Providers\RouteServiceProvider::class,
+        DreamFactory\Managed\Providers\AuditServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

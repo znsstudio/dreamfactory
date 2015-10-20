@@ -12,15 +12,13 @@
 */
 
 use DreamFactory\Managed\Support\Managed;
-use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogHandler;
 
-$app = new Illuminate\Foundation\Application(
-    realpath(__DIR__ . '/../')
-);
+$app = new Illuminate\Foundation\Application(realpath(__DIR__ . '/../'));
 
 /*
 |--------------------------------------------------------------------------
@@ -33,43 +31,44 @@ $app = new Illuminate\Foundation\Application(
 |
 */
 
-$app->singleton(
-    'Illuminate\Contracts\Http\Kernel',
-    'DreamFactory\Http\Kernel'
-);
+$app->singleton('Illuminate\Contracts\Http\Kernel',
+    'DreamFactory\Http\Kernel');
 
-$app->singleton(
-    'Illuminate\Contracts\Console\Kernel',
-    'DreamFactory\Console\Kernel'
-);
+$app->singleton('Illuminate\Contracts\Console\Kernel',
+    'DreamFactory\Console\Kernel');
 
-$app->singleton(
-    'Illuminate\Contracts\Debug\ExceptionHandler',
-    'DreamFactory\Exceptions\Handler'
-);
+$app->singleton('Illuminate\Contracts\Debug\ExceptionHandler',
+    'DreamFactory\Exceptions\Handler');
 
-$app->configureMonologUsing(function ($monolog){
-    $logFile = storage_path('logs/dreamfactory.log');
-    if (!config('df.standalone')) {
-        $logFile = Managed::getLogFile();
-    }
-
+$app->configureMonologUsing(function ($monolog) {
+    $logFile = config('df.standalone') ? Managed::getLogFile() : storage_path('logs/dreamfactory.log');
     $mode = config('app.log');
 
-    if ($mode === 'syslog') {
-        $monolog->pushHandler(new SyslogHandler('dreamfactory'));
-    } else {
-        if ($mode === 'single') {
-            $handler = new StreamHandler($logFile);
-        } else if ($mode === 'errorlog') {
-            $handler = new ErrorLogHandler();
-        } else {
-            $handler = new RotatingFileHandler($logFile, 5);
-        }
+    $_handler = null;
+    $_formatter = new LineFormatter(null, null, true, true);
 
-        $monolog->pushHandler($handler);
-        $handler->setFormatter(new LineFormatter(null, null, true, true));
+    /** @type Monolog\Logger $monolog */
+    switch ($mode) {
+        case 'syslog':
+            $_handler = new SyslogHandler('dreamfactory');
+            $_formatter = null;
+            break;
+
+        case 'single':
+            $_handler = new StreamHandler($logFile);
+            break;
+
+        case 'errorlog':
+            $_handler = new ErrorLogHandler();
+            break;
+
+        default:
+            $_handler = new RotatingFileHandler($logFile, 5);
+            break;
     }
+
+    $_handler && $monolog->pushHandler($_handler);
+    $_formatter && $_handler->setFormatter($_formatter);
 });
 
 /*

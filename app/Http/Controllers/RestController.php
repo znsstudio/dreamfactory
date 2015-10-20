@@ -20,9 +20,12 @@ class RestController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('data_collection');
         $this->middleware('access_check');
-        $this->middleware('api_limits');
+
+        if (!config('df.standalone')) {
+            $this->middleware('api_limits');
+            $this->middleware('data_collection');
+        }
     }
 
     /**
