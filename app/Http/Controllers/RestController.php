@@ -20,8 +20,7 @@ class RestController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
-
+        $this->middleware('data_collection');
         $this->middleware('access_check');
         $this->middleware('api_limits');
     }

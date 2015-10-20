@@ -11,15 +11,4 @@ abstract class Controller extends BaseController
     //******************************************************************************
 
     use DispatchesJobs, ValidatesRequests;
-
-    //******************************************************************************
-    //* Methods
-    //******************************************************************************
-
-    /** ctor */
-    public function __construct()
-    {
-        $this->middleware('data_collection');
-    }
-
 }
