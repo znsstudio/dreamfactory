@@ -1,13 +1,12 @@
-<?php
-namespace DreamFactory\Http\Controllers;
+<?php namespace DreamFactory\Http\Controllers;
 
+use DreamFactory\Core\Contracts\ServiceResponseInterface;
+use DreamFactory\Core\Utility\ResponseFactory;
+use DreamFactory\Core\Utility\ServiceHandler;
+use DreamFactory\Library\Utility\Enums\Verbs;
 use Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use DreamFactory\Library\Utility\Enums\Verbs;
-use DreamFactory\Core\Utility\ResponseFactory;
-use DreamFactory\Core\Utility\ServiceHandler;
-use DreamFactory\Core\Contracts\ServiceResponseInterface;
 
 /**
  * Class RestController
@@ -16,12 +15,13 @@ use DreamFactory\Core\Contracts\ServiceResponseInterface;
  */
 class RestController extends Controller
 {
-
     /**
      * Create new Rest Controller.
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('access_check');
         $this->middleware('api_limits');
     }
@@ -33,10 +33,9 @@ class RestController extends Controller
      *
      * @return null|ServiceResponseInterface
      */
-    public function index(
-        /** @noinspection PhpUnusedParameterInspection */
-        $version = null
-    ){
+    public function index(/** @noinspection PhpUnusedParameterInspection */
+        $version = null)
+    {
         try {
             $services = ServiceHandler::listServices();
             $response = ResponseFactory::create($services);
@@ -138,10 +137,9 @@ class RestController extends Controller
     public function handlePOST($version = null, $service = null, $resource = null)
     {
         // Check for the various method override headers or query params
-        $xMethod =
-            Request::header('X-HTTP-Method',
-                Request::header('X-HTTP-Method-Override',
-                    Request::header('X-Method-Override', Request::query('method'))));;
+        $xMethod = Request::header('X-HTTP-Method',
+            Request::header('X-HTTP-Method-Override',
+                Request::header('X-Method-Override', Request::query('method'))));;
         if (!empty($xMethod)) {
             if (!in_array($xMethod, Verbs::getDefinedConstants())) {
                 throw new MethodNotAllowedHttpException("Invalid verb tunneling with " . $xMethod);

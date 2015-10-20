@@ -1,10 +1,8 @@
-<?php
+<?php namespace DreamFactory\Http\Middleware;
 
-namespace DreamFactory\Http\Middleware;
-
+use Closure;
 use DreamFactory\Core\Models\User;
 use Illuminate\Database\QueryException;
-use Closure;
 
 class FirstUserCheck
 {

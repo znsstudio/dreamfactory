@@ -3,6 +3,7 @@
 use Closure;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Managed\Support\Managed;
+use Illuminate\Support\Facades\Log;
 
 class DataCollection
 {
@@ -20,6 +21,8 @@ class DataCollection
      */
     public function handle($request, Closure $next)
     {
+        Log::info('middleware: data_collection');
+
         //  Send the audit data
         Managed::auditRequest($request, Session::getPublicInfo());
 

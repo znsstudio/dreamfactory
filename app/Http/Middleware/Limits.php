@@ -1,6 +1,4 @@
-<?php
-
-namespace Dreamfactory\Http\Middleware;
+<?php namespace Dreamfactory\Http\Middleware;
 
 use Closure;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
@@ -8,12 +6,10 @@ use DreamFactory\Core\Exceptions\TooManyRequestsException;
 use DreamFactory\Core\Utility\ResponseFactory;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Managed\Support\Managed;
-use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Routing\Router;
 
 class Limits
 {
-
     private $_inUnitTest = false;
 
     /**
@@ -30,7 +26,7 @@ class Limits
         $consoleApiKey = AccessCheck::getConsoleApiKey($request);
 
         // Get limits
-        if(config('df.standalone') === true || $consoleApiKey === Managed::getConsoleKey()){
+        if (config('df.standalone') === true || $consoleApiKey === Managed::getConsoleKey()) {
             return $next($request);
         } else {
             $limits = Managed::getLimits();
@@ -39,11 +35,10 @@ class Limits
             // into an array
             $limits['api'] = (array)$limits['api'];
 
-            foreach(array_keys($limits['api']) as $key) {
+            foreach (array_keys($limits['api']) as $key) {
                 $limits['api'][$key] = (array)$limits['api'][$key];
             }
         }
-
 
         if (!empty($limits) && is_null($this->_getServiceName()) === false) {
 
@@ -109,18 +104,14 @@ class Limits
                         }
                     }
                 }
-            } catch ( \Exception $e ) {
-                return ResponseFactory::getException(
-                    new InternalServerErrorException('Unable to update cache'),
-                    $request
-                );
+            } catch (\Exception $e) {
+                return ResponseFactory::getException(new InternalServerErrorException('Unable to update cache'),
+                    $request);
             }
 
             if ($overLimit === true) {
-                return ResponseFactory::getException(
-                    new TooManyRequestsException('Specified connection limit exceeded'),
-                    $request
-                );
+                return ResponseFactory::getException(new TooManyRequestsException('Specified connection limit exceeded'),
+                    $request);
             }
         }
 
@@ -192,12 +183,11 @@ class Limits
             $router = app('router');
             $service = strtolower($router->input('service'));
 
-            if (is_null($service) === true ) {
+            if (is_null($service) === true) {
                 return null;
             } else {
                 return 'service:' . $service;
             }
-
         }
     }
 }
