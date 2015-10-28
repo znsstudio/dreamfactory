@@ -1,0 +1,9 @@
+{
+  "name":        "DreamFactory(tm) Platform",
+  "description": "The DreamFactory(tm) Platform",
+  "website":     "https://www.dreamfactory.com/",
+  "success_url": "/",
+  "addons":      [
+    "cleardb"
+  ]
+}

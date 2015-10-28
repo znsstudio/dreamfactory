@@ -62,7 +62,7 @@
   },
   "autoload":          {
     "classmap": [
-      "database"
+      "database/"
     ],
     "psr-4":    {
       "DreamFactory\\": "app/"

@@ -1,0 +1,14 @@
+app.json
+.profile.d/
+Procfile
+vendor
+bootstrap/cache/*
+storage/apps/*
+storage/databases/*
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+.git/
+.idea/
+manifest.yml
