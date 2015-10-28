@@ -1,6 +1,6 @@
 {
   "WEB_SERVER":     "nginx",
-  "LIBDIR":         ".",
+  "LIBDIR":         "dreamfactory",
   "WEBDIR":         "web",
   "NGINX_VERSION":  "{NGINX_16_LATEST}",
   "PHP_VERSION":    "{PHP_56_LATEST}",
@@ -18,6 +18,11 @@
     "pdo_mysql",
     "mysql",
     "zip",
-    "fileinfo"
+    "fileinfo",
+    "mbstring",
+    "gd",
+    "zip",
+    "openssl",
+    "sockets"
   ]
 }
