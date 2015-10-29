@@ -4,7 +4,7 @@ applications:
   memory: 512M
   instances: 1
   host: df2
-  path: ./ 
+  path: .
   buildpack: https://github.com/dmikusa-pivotal/cf-php-build-pack.git
   env:
     BP_DEBUG: "True"

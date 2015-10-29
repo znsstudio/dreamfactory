@@ -13,3 +13,5 @@ phpunit.xml
 Thumbs.db
 /storage/cache
 /bootstrap/cache
+/mnt
+

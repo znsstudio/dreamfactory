@@ -2,15 +2,8 @@
 applications:
 - name: df2
   memory: 512M
-  instances: 1
-  host: df2
-  path: ./
-  buildpack: https://github.com/cloudfoundry/php-buildpack
-  services:
-  - mysql-db
+  buildpack: https://github.com/cloudfoundry/php-buildpack#v3.2.2
   env:
+    CF_STAGING_TIMEOUT: 15
+    CF_STARTUP_TIMEOUT: 15
     BP_DEBUG: "True"
-    SSH_HOST: jablan@jablan
-    SSH_PATH: /home/vcap
-    SSH_KEY_NAME: sshfs_rsa
-    SSH_OPTS: '["cache=yes", "kernel_cache", "compression=no", "large_read"]'
