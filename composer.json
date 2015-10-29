@@ -75,9 +75,10 @@
   },
   "scripts":           {
     "pre-install-cmd":  [
-      "echo \"\npath is $PWD\nls is\n$(ls -aRl)\""
+      "echo \"\npath is $PWD\nls is\n$(ls -al)\""
     ],
     "post-install-cmd": [
+      "echo \"\npath is $PWD\nls is\n$(ls -al)\"",
       "php artisan clear-compiled",
       "php artisan optimize",
       "php artisan dreamfactory:pull-migrations"
@@ -89,7 +90,7 @@
     ]
   },
   "config":            {
-    "preferred-install": "dist"
+    "preferred-install": "source"
   },
   "extra":             {
     "branch-alias":    {
