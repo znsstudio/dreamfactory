@@ -18,6 +18,7 @@
 
 use DreamFactory\Library\Utility\IfSet;
 use DreamFactory\Library\Utility\Json;
+use Illuminate\Support\Facades\Log;
 
 //*************************************************************************
 //	Constants
@@ -63,6 +64,7 @@ return [
         try {
             $_services = Json::decode($_envData, true);
         } catch (\InvalidArgumentException $_ex) {
+            /** @noinspection PhpUndefinedMethodInspection */
             Log::notice('Environment not set correctly for this deployment.' .
                 PHP_EOL .
                 'Environment Dump' .
@@ -101,6 +103,7 @@ return [
             return $_db;
         }
 
+        /** @noinspection PhpUndefinedMethodInspection */
         Log::notice('Database configuration found for PaaS "' .
             PAAS_NAME .
             '", but required environment variable is invalid or null.' .
