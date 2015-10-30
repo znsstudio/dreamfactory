@@ -1,19 +1,19 @@
-##	This file is part of the DreamFactory Services Platform(tm) (DSP)
+###
+## DreamFactory(tm) Platform <http://github.com/dreamfactorysoftware/dreamfactory>
+## Copyright 2012-2016 DreamFactory Software, Inc. <support@dreamfactory.com>
 ##
-##	DreamFactory Services Platform(tm) <http://github.com/dreamfactorysoftware/dsp-core>
-##	Copyright 2012-2014 DreamFactory Software, Inc. <support@dreamfactory.com>
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
 ##
-##	Licensed under the Apache License, Version 2.0 (the "License");
-##	you may not use this file except in compliance with the License.
-##	You may obtain a copy of the License at
+## http://www.apache.org/licenses/LICENSE-2.0
 ##
-##	http://www.apache.org/licenses/LICENSE-2.0
-##
-##	Unless required by applicable law or agreed to in writing, software
-##	distributed under the License is distributed on an "AS IS" BASIS,
-##	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-##	See the License for the specific language governing permissions and
-##	limitations under the License.
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+###
 
 ##**************************************************************************
 ##
@@ -37,17 +37,9 @@ server {
 
 	server_name dsp.local;
 
-	# Change these values accordingly
-	set $doc_root "var/www/launchpad/web";
-	set $error_log "var/www/launchpad/log/error.log";
-	set $access_log "var/www/launchpad/log/access.log";
-
-	# Doc root
-	root /$doc_root;
-
-	# Change locations/names as you please
-	error_log /$error_log;
-	#access_log /$access_log combined;
+	root /var/www/launchpad/public;
+	error_log /var/www/launchpad/storage/logs/error.log;
+	access_log /var/www/launchpad/storage/logs/access.log combined;
 
 	# Our DSP locations
 	include dsp-locations.conf;
@@ -59,17 +51,9 @@ server {
 
 	server_name dsp.local;
 
-	# Change these values accordingly
-	set $doc_root "var/www/launchpad/web";
-	set $error_log "var/www/launchpad/log/error.log";
-	set $access_log "var/www/launchpad/log/access.log";
-
-	# Doc root
-	root /$doc_root;
-
-	# Change locations/names as you please
-	error_log /$error_log;
-	#access_log /$access_log combined;
+	root /var/www/launchpad/public;
+	error_log /var/www/launchpad/storage/logs/error.log;
+	access_log /var/www/launchpad/storage/logs/access.log combined;
 
 	# SSL config
 	# This way you can keep it locked down a little better
