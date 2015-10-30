@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c0d72b51b7d18e37c9463f6a1f5163e4",
-    "content-hash": "d04b761a7eaba00f18a2a14de78fccc3",
+    "hash": "f13be0b4b849087f5f3225e9073ab3e9",
+    "content-hash": "6c70b766de237b1f18d9a39cb1036fee",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -717,16 +717,16 @@
         },
         {
             "name": "dreamfactory/df-managed",
-            "version": "1.0.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "34530b00ac41271b5e0bb45bc2f10e6824bd7df1"
+                "reference": "5681192e634a9ad20344f7e346960c3a55394e8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/34530b00ac41271b5e0bb45bc2f10e6824bd7df1",
-                "reference": "34530b00ac41271b5e0bb45bc2f10e6824bd7df1",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/5681192e634a9ad20344f7e346960c3a55394e8e",
+                "reference": "5681192e634a9ad20344f7e346960c3a55394e8e",
                 "shasum": ""
             },
             "require": {
@@ -773,7 +773,7 @@
                 "enterprise",
                 "storage"
             ],
-            "time": "2015-10-28 19:15:56"
+            "time": "2015-10-28 19:16:19"
         },
         {
             "name": "dreamfactory/df-mongodb",
@@ -5152,9 +5152,18 @@
             "time": "2015-10-11 09:39:48"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "dev-master",
+            "alias_normalized": "9999999-dev",
+            "version": "dev-develop",
+            "package": "dreamfactory/df-managed"
+        }
+    ],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "dreamfactory/df-managed": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
