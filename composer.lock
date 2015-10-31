@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f13be0b4b849087f5f3225e9073ab3e9",
+    "hash": "dbaaf65041e387f3a500441d72b32f38",
     "content-hash": "6c70b766de237b1f18d9a39cb1036fee",
     "packages": [
         {
@@ -721,12 +721,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "5681192e634a9ad20344f7e346960c3a55394e8e"
+                "reference": "4735992987babd35b1fb9dd4822c401c4b0a85d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/5681192e634a9ad20344f7e346960c3a55394e8e",
-                "reference": "5681192e634a9ad20344f7e346960c3a55394e8e",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/4735992987babd35b1fb9dd4822c401c4b0a85d3",
+                "reference": "4735992987babd35b1fb9dd4822c401c4b0a85d3",
                 "shasum": ""
             },
             "require": {
@@ -773,7 +773,7 @@
                 "enterprise",
                 "storage"
             ],
-            "time": "2015-10-28 19:16:19"
+            "time": "2015-10-30 01:19:40"
         },
         {
             "name": "dreamfactory/df-mongodb",

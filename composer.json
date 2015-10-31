@@ -75,7 +75,8 @@
   },
   "scripts":           {
     "pre-install-cmd":  [
-      "echo \"\npath is $PWD\nls is\n$(ls -al)\""
+      "echo \"\npath is $PWD\nls is\n$(ls -al)\"",
+      "rm -rf bootstrap/cache/*.php"
     ],
     "post-install-cmd": [
       "echo \"\npath is $PWD\nls is\n$(ls -al)\"",
