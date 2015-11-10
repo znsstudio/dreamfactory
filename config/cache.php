@@ -1,9 +1,7 @@
 <?php
-
-use DreamFactory\Managed\Support\Managed;
+use DreamFactory\Managed\Facades\Managed;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store
@@ -27,7 +25,7 @@ return [
     |
     */
 
-    'stores'  => [
+    'stores' => [
 
         'apc'       => [
             'driver' => 'apc',
@@ -42,7 +40,7 @@ return [
         ],
         'file'      => [
             'driver' => 'file',
-            'path'   => (env('DF_MANAGED'))? Managed::getCachePath() : storage_path('framework/cache'),
+            'path'   => env('DF_CACHE_PATH', sys_get_temp_dir() . DIRECTORY_SEPARATOR . '.df-cache'),
         ],
         'memcached' => [
             'driver'  => 'memcached',
@@ -71,6 +69,6 @@ return [
     |
     */
 
-    'prefix'  => (env('DF_MANAGED'))? Managed::getCacheKeyPrefix() : 'dreamfactory',
+    'prefix' => Managed::getCachePrefix(),
 
 ];

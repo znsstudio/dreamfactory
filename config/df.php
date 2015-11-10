@@ -17,8 +17,6 @@ return [
     // Local File Storage setup, see also local config/filesystems.php
     'storage_path'                 => storage_path(),
     'local_file_service_container' => trim(env('DF_LOCAL_FILE_ROOT', 'app'), '/'),
-    // Set this false for hosted/managed environment.
-    'managed'                      => env('DF_MANAGED', false),
     // DB configs
     'db'                           => [
         // The default number of records to return at once for database queries
