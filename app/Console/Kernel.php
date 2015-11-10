@@ -1,35 +1,22 @@
 <?php namespace DreamFactory\Console;
 
-use Illuminate\Console\Scheduling\Schedule;
+use DreamFactory\Console\Commands\ClearAllFileCache;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    //******************************************************************************
+    //* Members
+    //******************************************************************************
 
-    /**
-     * The Artisan commands provided by your application.
-     *
-     * @var array
-     */
+    /** @inheritdoc */
     protected $commands = [
-//        'DreamFactory\Console\Commands\Inspire',
-        'DreamFactory\Console\Commands\ClearAllFileCache',
-        'DreamFactory\Console\Commands\Request',
-        'DreamFactory\Console\Commands\Import',
-        'DreamFactory\Console\Commands\ImportPackage',
-        'DreamFactory\Console\Commands\PullMigrations',
-        'DreamFactory\Console\Commands\Setup'
+        ClearAllFileCache::class,
+        //        \DreamFactory\Console\Commands\ClearAllFileCache:class,
+        //        \DreamFactory\Console\Commands\Request:class,
+        //        \DreamFactory\Console\Commands\Import:class,
+        //        \DreamFactory\Console\Commands\ImportPackage:class,
+        //        \DreamFactory\Console\Commands\PullMigrations:class,
+        //        \DreamFactory\Console\Commands\Setup:class,
     ];
-
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     *
-     * @return void
-     */
-    protected function schedule(Schedule $schedule)
-    {
-//        $schedule->command('inspire')->hourly();
-    }
 }

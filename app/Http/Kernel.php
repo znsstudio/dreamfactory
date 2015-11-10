@@ -1,37 +1,40 @@
 <?php namespace DreamFactory\Http;
 
+use DreamFactory\Http\Middleware\AccessCheck;
+use DreamFactory\Http\Middleware\Cors;
+use DreamFactory\Http\Middleware\FirstUserCheck;
+use Dreamfactory\Managed\Http\Middleware\DataCollection;
+use Dreamfactory\Managed\Http\Middleware\Limits;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class Kernel extends HttpKernel
 {
-    /**
-     * The application's global HTTP middleware stack.
-     *
-     * @var array
-     */
+    //******************************************************************************
+    //* Members
+    //******************************************************************************
+
+    /** @inheritdoc */
     protected $middleware = [
-        'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
-        'Illuminate\Cookie\Middleware\EncryptCookies',
-        'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
-        'Illuminate\Session\Middleware\StartSession',
-        'Illuminate\View\Middleware\ShareErrorsFromSession',
-        'DreamFactory\Http\Middleware\FirstUserCheck',
-        'DreamFactory\Http\Middleware\Cors',
-        //'DreamFactory\Http\Middleware\VerifyCsrfToken',
+        CheckForMaintenanceMode::class,
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        FirstUserCheck::class,
+        Limits::class,
+        DataCollection::class,
+        Cors::class,
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * @var array
-     */
+    /** @inheritdoc */
     protected $routeMiddleware = [
-        'auth'            => 'DreamFactory\Http\Middleware\Authenticate',
-        'auth.basic'      => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-        'guest'           => 'DreamFactory\Http\Middleware\RedirectIfAuthenticated',
-        'api_limits'      => 'DreamFactory\Managed\Http\Middleware\Limits',
-        'access_check'    => 'DreamFactory\Http\Middleware\AccessCheck',
-        'data_collection' => 'DreamFactory\Managed\Http\Middleware\DataCollection',
+        'auth.basic'   => AuthenticateWithBasicAuth::class,
+        'access_check' => AccessCheck::class,
     ];
-
 }

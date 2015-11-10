@@ -1,6 +1,4 @@
-<?php
-
-namespace DreamFactory\Console\Commands;
+<?php namespace DreamFactory\Console\Commands;
 
 use DreamFactory\Managed\Support\Managed;
 use Illuminate\Console\Command;
