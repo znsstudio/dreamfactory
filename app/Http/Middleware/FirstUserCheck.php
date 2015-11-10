@@ -1,15 +1,14 @@
-<?php
+<?php namespace DreamFactory\Http\Middleware;
 
-namespace DreamFactory\Http\Middleware;
-
+use Closure;
 use DreamFactory\Core\Models\User;
 use Illuminate\Database\QueryException;
-use Closure;
+use Illuminate\Http\Request;
 
 class FirstUserCheck
 {
     /**
-     * @param          $request
+     * @param Request  $request
      * @param \Closure $next
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -17,9 +16,7 @@ class FirstUserCheck
      */
     public function handle($request, Closure $next)
     {
-        $route = $request->getPathInfo();
-
-        if ('/setup' !== $route && '/setup_db' !== $route) {
+        if (!in_array($route = $request->getPathInfo(), ['/setup', '/setup_db',])) {
             try {
                 if (!User::adminExists()) {
                     return redirect()->to('/setup');

@@ -29,9 +29,9 @@ class Kernel extends HttpKernel
         'auth'            => 'DreamFactory\Http\Middleware\Authenticate',
         'auth.basic'      => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
         'guest'           => 'DreamFactory\Http\Middleware\RedirectIfAuthenticated',
-        'api_limits'      => 'DreamFactory\Http\Middleware\Limits',
+        'api_limits'      => 'DreamFactory\Managed\Http\Middleware\Limits',
         'access_check'    => 'DreamFactory\Http\Middleware\AccessCheck',
-        'data_collection' => 'DreamFactory\Http\Middleware\DataCollection',
+        'data_collection' => 'DreamFactory\Managed\Http\Middleware\DataCollection',
     ];
 
 }
