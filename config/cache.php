@@ -1,32 +1,10 @@
 <?php
-use DreamFactory\Managed\Facades\Managed;
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Default Cache Store
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default cache connection that gets used while
-    | using this caching library. This connection is used when another is
-    | not explicitly specified when executing a given caching function.
-    |
-    */
-
+    /** Default Store */
     'default' => env('CACHE_DRIVER', 'file'),
-    /*
-    |--------------------------------------------------------------------------
-    | Cache Stores
-    |--------------------------------------------------------------------------
-    |
-    | Here you may define all of the cache "stores" for your application as
-    | well as their drivers. You may even define multiple stores for the
-    | same cache driver to group types of items stored in your caches.
-    |
-    */
-
-    'stores' => [
-
+    /** Stores */
+    'stores'  => [
         'apc'       => [
             'driver' => 'apc',
         ],
@@ -40,7 +18,7 @@ return [
         ],
         'file'      => [
             'driver' => 'file',
-            'path'   => env('DF_CACHE_PATH', sys_get_temp_dir() . DIRECTORY_SEPARATOR . '.df-cache'),
+            'path'   => env('DF_CACHE_PATH', app_path('bootstrap/cache')),
         ],
         'memcached' => [
             'driver'  => 'memcached',
@@ -56,19 +34,7 @@ return [
             'driver'     => 'redis',
             'connection' => 'default',
         ],
-
     ],
-    /*
-    |--------------------------------------------------------------------------
-    | Cache Key Prefix
-    |--------------------------------------------------------------------------
-    |
-    | When utilizing a RAM based store such as APC or Memcached, there might
-    | be other applications utilizing the same cache. So, we'll specify a
-    | value to get prefixed to all our keys so we can avoid collisions.
-    |
-    */
-
-    'prefix' => Managed::getCachePrefix(),
-
+    /** Key Prefix */
+    'prefix'  => env('DF_CACHE_PREFIX', 'dreamfactory'),
 ];

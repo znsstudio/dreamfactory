@@ -24,32 +24,29 @@ if (!function_exists('__dfe_bootstrap')) {
         $_app->singleton(Illuminate\Contracts\Console\Kernel::class, DreamFactory\Console\Kernel::class);
         $_app->singleton(Illuminate\Contracts\Debug\ExceptionHandler::class, DreamFactory\Exceptions\Handler::class);
 
-        //  Boot the managed service
-        $_app->singleton(ManagedService)
-
         //  Configure logging
         $_app->configureMonologUsing(function (Logger $monolog){
-            $logFile = storage_path('logs/dreamfactory.log');
-            if (config('df.managed')) {
-                $logFile = Managed::getLogFile();
+            $_handler = null;
+
+            $_logPath = env('DF_MANAGED_LOG_PATH', storage_path('logs'));
+            $_logFile = $_logPath . DIRECTORY_SEPARATOR . env('DF_MANAGED_LOG_FILE', 'dreamfactory.log');
+
+            switch (config('app.log')) {
+                case 'syslog':
+                    $monolog->pushHandler(new SyslogHandler('dreamfactory'));
+                    break;
+                case 'single':
+                    $_handler = new StreamHandler($_logFile);
+                    break;
+                case 'errorlog':
+                    $_handler = new ErrorLogHandler($_logFile);
+                    break;
+                default:
+                    $_handler = new RotatingFileHandler($_logFile, env('DF_MANAGED_LOG_ROTATIONS', 5));
+                    break;
             }
 
-            $mode = config('app.log');
-
-            if ($mode === 'syslog') {
-                $monolog->pushHandler(new SyslogHandler('dreamfactory'));
-            } else {
-                if ($mode === 'single') {
-                    $handler = new StreamHandler($logFile);
-                } else if ($mode === 'errorlog') {
-                    $handler = new ErrorLogHandler();
-                } else {
-                    $handler = new RotatingFileHandler($logFile, 5);
-                }
-
-                $monolog->pushHandler($handler);
-                $handler->setFormatter(new LineFormatter(null, null, true, true));
-            }
+            $_handler && $_handler->setFormatter(new LineFormatter(null, null, true, true));
         });
 
         //  Return the app

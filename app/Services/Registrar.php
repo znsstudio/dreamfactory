@@ -1,11 +1,14 @@
 <?php namespace DreamFactory\Services;
 
 use DreamFactory\User;
-use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
+use Validator;
 
 class Registrar implements RegistrarContract
 {
+    //******************************************************************************
+    //* Methods
+    //******************************************************************************
 
     /**
      * Get a validator for an incoming registration request.
@@ -16,11 +19,12 @@ class Registrar implements RegistrarContract
      */
     public function validator(array $data)
     {
-        return Validator::make($data, [
-            'name'     => 'required|max:255',
-            'email'    => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        return Validator::make($data,
+            [
+                'name'     => 'required|max:255',
+                'email'    => 'required|email|max:255|unique:users',
+                'password' => 'required|confirmed|min:6',
+            ]);
     }
 
     /**

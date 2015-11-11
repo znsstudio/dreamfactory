@@ -1,38 +1,21 @@
 <?php namespace DreamFactory\Console\Commands;
 
-use DreamFactory\Managed\Support\Managed;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Event;
 
 class ClearAllFileCache extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    /** @inheritdoc */
     protected $signature = 'dreamfactory:clear-file-cache';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    /** @inheritdoc */
     protected $description = 'Command to clear all DreamFactory file-based cache, locally or in hosted environment.';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+    /** @inheritdoc */
     public function __construct()
     {
         parent::__construct();
 
-        if (config('df.managed')) {
-            $this->cacheRoot = Managed::getCacheRoot();
-        } else {
-            $this->cacheRoot = storage_path('framework/cache');
-        }
+        $this->cacheRoot = config('cache.path', storage_path('bootstrap/cache'));
     }
 
     /**
@@ -42,10 +25,12 @@ class ClearAllFileCache extends Command
      */
     public function handle()
     {
-        $this->laravel['events']->fire('cache:clearing', ['file']);
+        Event::fire('cache:clearing', ['file']);
+        //@todo why not use Disk::rmdir($this->cacheRoot,true);?
         $this->removeDirectory($this->cacheRoot);
-        $this->laravel['events']->fire('cache:cleared', ['file']);
-        $this->info('Cleared DreamFactory cache for all instances!');
+        Event::fire('cache:cleared', ['file']);
+
+        $this->info('Cleared DreamFactory cache for all instances');
     }
 
     /**
