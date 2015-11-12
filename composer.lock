@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f2fee205f2f4bde13f212a690e078f8a",
-    "content-hash": "3455c35f6e5c129f56ea67f04a5b3762",
+    "hash": "a8b61fe1f31d76e2e80ff25cd7f22ea9",
+    "content-hash": "336b39bfe810c92cb30e46312996bfa6",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -364,12 +364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-core.git",
-                "reference": "a3da78b4d691a6024a0c750b9c521cacfe44a156"
+                "reference": "85756a279be4cde9c7549e897eda9b0cac09f81a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/a3da78b4d691a6024a0c750b9c521cacfe44a156",
-                "reference": "a3da78b4d691a6024a0c750b9c521cacfe44a156",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/85756a279be4cde9c7549e897eda9b0cac09f81a",
+                "reference": "85756a279be4cde9c7549e897eda9b0cac09f81a",
                 "shasum": ""
             },
             "require": {
@@ -420,27 +420,26 @@
                 "paas",
                 "rest"
             ],
-            "time": "2015-11-10 20:46:53"
+            "time": "2015-11-11 22:23:11"
         },
         {
             "name": "dreamfactory/df-managed",
-            "version": "dev-feature/2.0.x-dev",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "ba2d9f45f53d84bf47ef01186496646db522a0f3"
+                "reference": "3a070fb130c1f3efadb2ca954f99fb36fbdf6c0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/ba2d9f45f53d84bf47ef01186496646db522a0f3",
-                "reference": "ba2d9f45f53d84bf47ef01186496646db522a0f3",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/808dffe9ef1201bb056b33daff048336434bfd12",
+                "reference": "3a070fb130c1f3efadb2ca954f99fb36fbdf6c0d",
                 "shasum": ""
             },
             "require": {
                 "dreamfactory/php-utils": "1.1.*"
             },
             "require-dev": {
-                "dreamfactory/df-core": "0.1.*",
                 "laravel/laravel": "5.1.*",
                 "phpunit/phpunit": "@stable"
             },
@@ -477,11 +476,11 @@
             "homepage": "https://www.dreamfactory.com/",
             "keywords": [
                 "dreamfactory",
+                "dsp",
                 "enterprise",
-                "manager",
-                "remote"
+                "storage"
             ],
-            "time": "2015-11-10 22:27:12"
+            "time": "2015-11-11 23:35:15"
         },
         {
             "name": "dreamfactory/df-rws",
@@ -714,12 +713,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/php-utils.git",
-                "reference": "a05011475936ce35ff111ff003067e74b967ac96"
+                "reference": "922070acbfa96e89366b84550395c468652a290b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/php-utils/zipball/a05011475936ce35ff111ff003067e74b967ac96",
-                "reference": "a05011475936ce35ff111ff003067e74b967ac96",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/php-utils/zipball/922070acbfa96e89366b84550395c468652a290b",
+                "reference": "922070acbfa96e89366b84550395c468652a290b",
                 "shasum": ""
             },
             "require": {
@@ -760,7 +759,7 @@
                 "symfony",
                 "utility"
             ],
-            "time": "2015-10-18 20:13:52"
+            "time": "2015-11-11 23:16:55"
         },
         {
             "name": "guzzle/guzzle",
@@ -1161,12 +1160,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "4b8b1cdc9332a7aa4afff5e5b3d7183e9d882550"
+                "reference": "875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/4b8b1cdc9332a7aa4afff5e5b3d7183e9d882550",
-                "reference": "4b8b1cdc9332a7aa4afff5e5b3d7183e9d882550",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed",
+                "reference": "875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed",
                 "shasum": ""
             },
             "require": {
@@ -1282,7 +1281,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-11-10 14:38:43"
+            "time": "2015-11-11 22:45:42"
         },
         {
             "name": "laravel/socialite",
@@ -3729,12 +3728,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6cc501c1adf86482fbb54fb2958e1c7685f57a61"
+                "reference": "6f9251d0910483fcbe22ee7a47ed604e43070770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6cc501c1adf86482fbb54fb2958e1c7685f57a61",
-                "reference": "6cc501c1adf86482fbb54fb2958e1c7685f57a61",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6f9251d0910483fcbe22ee7a47ed604e43070770",
+                "reference": "6f9251d0910483fcbe22ee7a47ed604e43070770",
                 "shasum": ""
             },
             "require": {
@@ -3793,7 +3792,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-11-10 21:39:46"
+            "time": "2015-11-11 12:23:02"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4325,17 +4324,9 @@
             "time": "2015-11-10 10:42:06"
         }
     ],
-    "aliases": [
-        {
-            "alias": "dev-master",
-            "alias_normalized": "9999999-dev",
-            "version": "dev-feature/2.0.x-dev",
-            "package": "dreamfactory/df-managed"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dreamfactory/df-managed": 20,
         "laravel/socialite": 20
     },
     "prefer-stable": false,

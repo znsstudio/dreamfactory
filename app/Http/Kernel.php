@@ -7,13 +7,6 @@ use DreamFactory\Managed\Bootstrap\ManagedInstance;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Bootstrap\BootProviders;
-use Illuminate\Foundation\Bootstrap\ConfigureLogging;
-use Illuminate\Foundation\Bootstrap\DetectEnvironment;
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
-use Illuminate\Foundation\Bootstrap\RegisterFacades;
-use Illuminate\Foundation\Bootstrap\RegisterProviders;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Session\Middleware\StartSession;
@@ -26,17 +19,6 @@ class Kernel extends HttpKernel
     //******************************************************************************
 
     /** @inheritdoc */
-    protected $bootstrappers = [
-        DetectEnvironment::class,
-        ManagedInstance::class,
-        LoadConfiguration::class,
-        ConfigureLogging::class,
-        HandleExceptions::class,
-        RegisterFacades::class,
-        RegisterProviders::class,
-        BootProviders::class,
-    ];
-    /** @inheritdoc */
     protected $middleware = [
         CheckForMaintenanceMode::class,
         EncryptCookies::class,
@@ -44,8 +26,6 @@ class Kernel extends HttpKernel
         StartSession::class,
         ShareErrorsFromSession::class,
         FirstUserCheck::class,
-        //        Limits::class,
-        //        DataCollection::class,
         Cors::class,
     ];
     /** @inheritdoc */
@@ -53,4 +33,21 @@ class Kernel extends HttpKernel
         'auth.basic'   => AuthenticateWithBasicAuth::class,
         'access_check' => AccessCheck::class,
     ];
+
+    //******************************************************************************
+    //* Methods
+    //******************************************************************************
+
+    /**
+     * Inject our bootstrapper into the mix
+     */
+    protected function bootstrappers()
+    {
+        $_stack = parent::bootstrappers();
+
+        //  Insert our guy
+        array_unshift($_stack, array_shift($_stack), ManagedInstance::class);
+
+        return $_stack;
+    }
 }

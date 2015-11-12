@@ -10,6 +10,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 
+/** Isolate bootstrap code as to not pollute the global namespace */
 if (!function_exists('__dfe_bootstrap')) {
     /**
      * @return \Illuminate\Foundation\Application
@@ -27,9 +28,7 @@ if (!function_exists('__dfe_bootstrap')) {
         //  Configure logging
         $_app->configureMonologUsing(function (Logger $monolog){
             $_handler = null;
-
-            $_logPath = env('DF_MANAGED_LOG_PATH', storage_path('logs'));
-            $_logFile = $_logPath . DIRECTORY_SEPARATOR . env('DF_MANAGED_LOG_FILE', 'dreamfactory.log');
+            $_logFile = env('DF_MANAGED_LOG_PATH', storage_path('logs')) . DIRECTORY_SEPARATOR . env('DF_MANAGED_LOG_FILE', 'dreamfactory.log');
 
             switch (config('app.log')) {
                 case 'syslog':
@@ -46,7 +45,10 @@ if (!function_exists('__dfe_bootstrap')) {
                     break;
             }
 
-            $_handler && $_handler->setFormatter(new LineFormatter(null, null, true, true));
+            if ($_handler) {
+                $_handler->setFormatter(new LineFormatter(null, null, true, true));
+                $monolog->pushHandler($_handler);
+            }
         });
 
         //  Return the app

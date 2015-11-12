@@ -39,7 +39,7 @@
     "tymon/jwt-auth":            "0.5.*",
     "dreamfactory/df-managed":   "2.0.*",
     "dreamfactory/df-admin-app": "2.0.*",
-    "dreamfactory/df-core":      "dev-feature/decouple-managed as dev-master",
+    "dreamfactory/df-core":      "0.1.*",
     "dreamfactory/df-sqldb":     "0.1.*",
     "dreamfactory/df-rws":       "0.1.*",
     "dreamfactory/df-user":      "0.1.*",
