@@ -15,7 +15,7 @@ return [
     // Default content-type of response when accepts header is missing or empty.
     'default_response_type'        => 'application/json',
     // Local File Storage setup, see also local config/filesystems.php
-    'storage_path'                 => storage_path(),
+    'storage_path'                 => env('DF_MANAGED_STORAGE_PATH', storage_path()),
     'local_file_service_container' => trim(env('DF_LOCAL_FILE_ROOT', 'app'), '/'),
     // DB configs
     'db'                           => [

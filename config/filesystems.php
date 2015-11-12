@@ -43,8 +43,9 @@ return [
 
         'local'     => [
             'driver' => 'local',
-            'root'   => env('DF_MANAGED_STORAGE_PATH',
-                storage_path() . '/' . ltrim(env('DF_LOCAL_FILE_ROOT', 'app'), '/')),
+            'root'   => env('DF_MANAGED_STORAGE_PATH', storage_path()) .
+                DIRECTORY_SEPARATOR .
+                ltrim(env('DF_LOCAL_FILE_ROOT', 'app'), '/'),
         ],
         's3'        => [
             'driver' => 's3',
