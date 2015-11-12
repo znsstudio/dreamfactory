@@ -364,12 +364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-core.git",
-                "reference": "85756a279be4cde9c7549e897eda9b0cac09f81a"
+                "reference": "5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/85756a279be4cde9c7549e897eda9b0cac09f81a",
-                "reference": "85756a279be4cde9c7549e897eda9b0cac09f81a",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68",
+                "reference": "5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68",
                 "shasum": ""
             },
             "require": {
@@ -420,26 +420,27 @@
                 "paas",
                 "rest"
             ],
-            "time": "2015-11-11 22:23:11"
+            "time": "2015-11-12 18:49:36"
         },
         {
             "name": "dreamfactory/df-managed",
-            "version": "2.0.0",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "3a070fb130c1f3efadb2ca954f99fb36fbdf6c0d"
+                "reference": "2a01d595c6c60848e09460a1c68af1eaa1e53666"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/808dffe9ef1201bb056b33daff048336434bfd12",
-                "reference": "3a070fb130c1f3efadb2ca954f99fb36fbdf6c0d",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/2a01d595c6c60848e09460a1c68af1eaa1e53666",
+                "reference": "2a01d595c6c60848e09460a1c68af1eaa1e53666",
                 "shasum": ""
             },
             "require": {
                 "dreamfactory/php-utils": "1.1.*"
             },
             "require-dev": {
+                "dreamfactory/df-core": "0.1.*",
                 "laravel/laravel": "5.1.*",
                 "phpunit/phpunit": "@stable"
             },
@@ -476,11 +477,11 @@
             "homepage": "https://www.dreamfactory.com/",
             "keywords": [
                 "dreamfactory",
-                "dsp",
                 "enterprise",
-                "storage"
+                "manager",
+                "remote"
             ],
-            "time": "2015-11-11 23:35:15"
+            "time": "2015-11-12 20:32:18"
         },
         {
             "name": "dreamfactory/df-rws",
@@ -609,12 +610,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-user.git",
-                "reference": "57f3b77b11bff9fa62c3961e306a728c95f0e367"
+                "reference": "52cbfe9c9074b9169fe6de942422c21cefccbf85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-user/zipball/57f3b77b11bff9fa62c3961e306a728c95f0e367",
-                "reference": "57f3b77b11bff9fa62c3961e306a728c95f0e367",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-user/zipball/52cbfe9c9074b9169fe6de942422c21cefccbf85",
+                "reference": "52cbfe9c9074b9169fe6de942422c21cefccbf85",
                 "shasum": ""
             },
             "require": {
@@ -657,7 +658,7 @@
                 "dsp",
                 "user"
             ],
-            "time": "2015-11-06 07:46:41"
+            "time": "2015-11-12 18:47:09"
         },
         {
             "name": "dreamfactory/installer",
@@ -1160,12 +1161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed"
+                "reference": "1e55c79fd1d3e778d867a43f5495957fcb52a655"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed",
-                "reference": "875baf2d1645ce23e2ec0bf94fa7bb3e7fbfd6ed",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/1e55c79fd1d3e778d867a43f5495957fcb52a655",
+                "reference": "1e55c79fd1d3e778d867a43f5495957fcb52a655",
                 "shasum": ""
             },
             "require": {
@@ -1230,7 +1231,7 @@
             "require-dev": {
                 "aws/aws-sdk-php": "~3.0",
                 "iron-io/iron_mq": "~2.0",
-                "mockery/mockery": "~0.9.1",
+                "mockery/mockery": "~0.9.2",
                 "pda/pheanstalk": "~3.0",
                 "phpunit/phpunit": "~4.0",
                 "predis/predis": "~1.0"
@@ -1281,7 +1282,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-11-11 22:45:42"
+            "time": "2015-11-12 16:04:23"
         },
         {
             "name": "laravel/socialite",
@@ -1947,16 +1948,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "cab3aa3750d451c6e8d002433af583d88fd64862"
+                "reference": "0f04df0b23663799a8941fae13cd8e6299bde3ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/cab3aa3750d451c6e8d002433af583d88fd64862",
-                "reference": "cab3aa3750d451c6e8d002433af583d88fd64862",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/0f04df0b23663799a8941fae13cd8e6299bde3ed",
+                "reference": "0f04df0b23663799a8941fae13cd8e6299bde3ed",
                 "shasum": ""
             },
             "require": {
@@ -2015,7 +2016,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2015-11-08 22:24:35"
+            "time": "2015-11-12 16:18:56"
         },
         {
             "name": "react/promise",
