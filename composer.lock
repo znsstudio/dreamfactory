@@ -105,12 +105,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ClassPreloader/ClassPreloader.git",
-                "reference": "9b10b913c2bdf90c3d2e0d726b454fb7f77c552a"
+                "reference": "4257542255b04ea4a7d844c61453987ba313daf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/9b10b913c2bdf90c3d2e0d726b454fb7f77c552a",
-                "reference": "9b10b913c2bdf90c3d2e0d726b454fb7f77c552a",
+                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/4257542255b04ea4a7d844c61453987ba313daf6",
+                "reference": "4257542255b04ea4a7d844c61453987ba313daf6",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +151,7 @@
                 "class",
                 "preload"
             ],
-            "time": "2015-11-09 22:51:51"
+            "time": "2015-11-13 14:44:11"
         },
         {
             "name": "danielstjules/stringy",
@@ -364,12 +364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-core.git",
-                "reference": "5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68"
+                "reference": "8e2e1b3210a6090d1db70470da6cc1fe92eec3a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68",
-                "reference": "5a5f83dcb5385c7d0a59a2f56550ae2b57d58a68",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-core/zipball/8e2e1b3210a6090d1db70470da6cc1fe92eec3a2",
+                "reference": "8e2e1b3210a6090d1db70470da6cc1fe92eec3a2",
                 "shasum": ""
             },
             "require": {
@@ -420,20 +420,20 @@
                 "paas",
                 "rest"
             ],
-            "time": "2015-11-12 18:49:36"
+            "time": "2015-11-13 15:34:57"
         },
         {
             "name": "dreamfactory/df-managed",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "332a9468de72f636869dc31b7456a9b47c682cc8"
+                "reference": "6ef48f1053404833e3f4460b3d47d5a9343dc8ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/332a9468de72f636869dc31b7456a9b47c682cc8",
-                "reference": "332a9468de72f636869dc31b7456a9b47c682cc8",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/6ef48f1053404833e3f4460b3d47d5a9343dc8ce",
+                "reference": "6ef48f1053404833e3f4460b3d47d5a9343dc8ce",
                 "shasum": ""
             },
             "require": {
@@ -481,7 +481,7 @@
                 "manager",
                 "remote"
             ],
-            "time": "2015-11-12 22:56:32"
+            "time": "2015-11-13 03:01:12"
         },
         {
             "name": "dreamfactory/df-rws",
@@ -1161,12 +1161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "1e55c79fd1d3e778d867a43f5495957fcb52a655"
+                "reference": "9a050335f6cc154d16a82bcd16917e5795c51a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/1e55c79fd1d3e778d867a43f5495957fcb52a655",
-                "reference": "1e55c79fd1d3e778d867a43f5495957fcb52a655",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9a050335f6cc154d16a82bcd16917e5795c51a15",
+                "reference": "9a050335f6cc154d16a82bcd16917e5795c51a15",
                 "shasum": ""
             },
             "require": {
@@ -1282,7 +1282,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-11-12 16:04:23"
+            "time": "2015-11-13 03:20:11"
         },
         {
             "name": "laravel/socialite",
