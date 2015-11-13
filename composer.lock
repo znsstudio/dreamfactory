@@ -424,16 +424,16 @@
         },
         {
             "name": "dreamfactory/df-managed",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dreamfactorysoftware/df-managed.git",
-                "reference": "2a01d595c6c60848e09460a1c68af1eaa1e53666"
+                "reference": "332a9468de72f636869dc31b7456a9b47c682cc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/2a01d595c6c60848e09460a1c68af1eaa1e53666",
-                "reference": "2a01d595c6c60848e09460a1c68af1eaa1e53666",
+                "url": "https://api.github.com/repos/dreamfactorysoftware/df-managed/zipball/332a9468de72f636869dc31b7456a9b47c682cc8",
+                "reference": "332a9468de72f636869dc31b7456a9b47c682cc8",
                 "shasum": ""
             },
             "require": {
@@ -481,7 +481,7 @@
                 "manager",
                 "remote"
             ],
-            "time": "2015-11-12 20:32:18"
+            "time": "2015-11-12 22:56:32"
         },
         {
             "name": "dreamfactory/df-rws",
