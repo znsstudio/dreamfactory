@@ -144,6 +144,11 @@ class AccessCheck
      */
     public function handle($request, Closure $next)
     {
+        //  Allow console requests through
+        if (env('DF_IS_VALID_CONSOLE_REQUEST', false)) {
+            return $next($request);
+        }
+
         try {
             static::setExceptions();
             //Get the api key.
