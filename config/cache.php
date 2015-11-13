@@ -18,7 +18,7 @@ return [
         ],
         'file'      => [
             'driver' => 'file',
-            'path'   => env('DF_CACHE_PATH', app_path('bootstrap/cache')),
+            'path'   => env('DF_CACHE_PATH', base_path('bootstrap/cache')),
         ],
         'memcached' => [
             'driver'  => 'memcached',
