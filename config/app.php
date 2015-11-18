@@ -74,7 +74,7 @@ return [
     */
 
     'key'    => env('APP_KEY', 'SomeRandomString'),
-    'cipher' => MCRYPT_RIJNDAEL_128,
+    'cipher' => env('DF_CIPHER', MCRYPT_RIJNDAEL_128),
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -156,7 +156,6 @@ return [
         DreamFactory\Providers\ConfigServiceProvider::class,
         DreamFactory\Providers\EventServiceProvider::class,
         DreamFactory\Providers\RouteServiceProvider::class,
-        DreamFactory\Managed\Providers\AuditServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -204,7 +203,5 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Socialize' => Laravel\Socialite\Facades\Socialite::class,
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
-
     ],
-
 ];

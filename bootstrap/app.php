@@ -11,12 +11,10 @@
 |
 */
 
-use DreamFactory\Managed\Support\Managed;
+use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
 
 $app = new Illuminate\Foundation\Application(realpath(__DIR__ . '/../'));
@@ -41,12 +39,8 @@ $app->singleton('Illuminate\Contracts\Console\Kernel',
 $app->singleton('Illuminate\Contracts\Debug\ExceptionHandler',
     'DreamFactory\Exceptions\Handler');
 
-$app->configureMonologUsing(function (Logger $monolog) {
-    $logFile = storage_path('logs/dreamfactory.log');
-
-    if (config('df.managed')) {
-        $logFile = Managed::getLogFile();
-    }
+$app->configureMonologUsing(function (Logger $monolog){
+    $logFile = env('DF_MANAGED_LOG_PATH', storage_path('logs')) . DIRECTORY_SEPARATOR . env('DF_MANAGED_LOG_FILE', 'dreamfactory.log');
 
     $mode = config('app.log');
 
